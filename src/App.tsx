@@ -3,11 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 import * as Components from './components/index'
 import React, { useRef } from 'react';
-
+import { ConversationBody } from './models/conversationbody';
 function App() {
   const [started, setStarted] = React.useState(false);
   const [isHolding, setIsHolding] = React.useState(false);
   const timeoutRef = useRef<number | null>(null);
+  const [Conversation, newConversation] = React.useState(null);
+  const [conversationImages, setImages] = React.useState([])
+  
 
   const handleMouseDown = () => {
     console.log("test")
@@ -27,8 +30,7 @@ function App() {
   const handleMouseUp = () => {
     if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
-    }
-    setIsHolding(false);
+    }    setIsHolding(false);
   };
 
   const handleMouseLeave = () => {
@@ -80,6 +82,12 @@ function App() {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
               </svg>
 
+            </button>
+            <button className='button-div'>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-full h-auto">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+              </svg>
+              <p className='button-text'>New</p>
             </button>
           </div>
           
