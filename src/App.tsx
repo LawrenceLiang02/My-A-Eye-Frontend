@@ -4,13 +4,15 @@ import './App.css';
 import * as Components from './components/index'
 import React, { useRef } from 'react';
 import { ConversationBody } from './models/conversationbody';
+import { Image }      from './models/image'
 function App() {
   const [started, setStarted] = React.useState(false);
   const [isHolding, setIsHolding] = React.useState(false);
   const [logsOpen, setLogsOpen] = React.useState(false);
   const timeoutRef = useRef<number | null>(null);
-  const [Conversation, newConversation] = React.useState(null);
-  const [conversationImages, setImages] = React.useState([])
+  const [conversationImages, setImages] = React.useState<Image[]>([])
+  const [conversationMsg, setMsg] = React.useState<string[]>([])
+  const [performCapture, setPerformCapture] = React.useState(false);
   
 
   const sampleData = ['apple', 'banana', 'orange','apple'];
@@ -51,12 +53,25 @@ function App() {
     setIsHolding(false);
   };
 
+  const updateImages = (newImages: Image[] ) => {
+    setImages(newImages)
+  }
+
+  const handleNewConvo = () => {
+    setPerformCapture(true)
+  }
+
+  const stopCapture = () => {
+    setPerformCapture(false)
+    
+  }
+
   return (
     <>
       <div className='overscroll-none overflow-hidden flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8 overscroll-none'>
         <div className={`flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 ${started ? `border-red-600`: `border-white`}`}>
           <div className={`${started ? ``: `hidden`} h-full w-auto bg-black rounded-lg`}>
-            <Components.Camera isShowVideo={started}/>
+            <Components.Camera isShowVideo={started} performCapture={performCapture} updateImages={updateImages} stopCapture={stopCapture} />
           </div>
           <div className={`${started ? `hidden`: ``}  w-full h-full bg-zig-zag flex flex-col items-center justify-around text-red-800 py-32 space-y-2 rounded-lg `}>
             <div className=''>
@@ -95,7 +110,7 @@ function App() {
               </svg>
               <p className='button-text'>Mic</p>
             </button>
-            <button className='button-div'>
+            <button className='button-div' onClick={handleNewConvo}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-full h-auto">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
               </svg>
