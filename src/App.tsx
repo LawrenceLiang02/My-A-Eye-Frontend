@@ -16,10 +16,11 @@ function App() {
   const [isMicRecording, setIsMicRecording] = React.useState(false);
   const timeoutRef = useRef<number | null>(null);
   const [conversationImages, setImages] = React.useState<Image[]>([]);
-  const [conversationMsg, setMsg] = React.useState<string[]>([]);
+  const [conversationMsgs, setMsgs] = React.useState<Message[]>([]);
+  const [currentPrompt, setCurrentPrompt] = React.useState<Message | null>(null)
   const [performCapture, setPerformCapture] = React.useState(false);
   const [imagesDone, setImagesDone] = React.useState(false);
-  const [promptDone, setPromptDone] = React.useState(false);
+  
 
 
   const sampleData: Message[] = [{
@@ -75,9 +76,9 @@ function App() {
   const handleNewConvo = () => {
     setPerformCapture(true)
     setImages([])
-    setMsg([])
+    setMsgs([])
     setImagesDone(false)
-    setPromptDone(false)
+    setCurrentPrompt(null);
   }
 
   const stopCapture = () => {
@@ -86,6 +87,17 @@ function App() {
 
   const updateImagesDone = () => {
     setImagesDone(true)
+  }
+  
+  // pass to audio recorder 
+  const updateCurrentPrompt = (newPrompt : Message) => {
+    if (currentPrompt != null) {
+      setMsgs(prevMsgs => [...prevMsgs, currentPrompt])
+    }
+    setCurrentPrompt(newPrompt)
+    if (imagesDone) {
+      //create data body
+    }
   }
 
   return (
