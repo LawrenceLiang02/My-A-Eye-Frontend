@@ -4,7 +4,12 @@ import './App.css';
 import * as Components from './components/index'
 import React, { useRef } from 'react';
 import { ConversationBody } from './models/conversationbody';
-import { Image }      from './models/image'
+import { Message } from './models/message';
+import { ConversationPayload } from './models/ConversationPayload';
+import { Image } from './models/image'
+import { formatToConversationCell } from './utils/stringUtil';
+
+
 function App() {
   const [started, setStarted] = React.useState(false);
   const [isHolding, setIsHolding] = React.useState(false);
@@ -13,18 +18,26 @@ function App() {
   const [conversationImages, setImages] = React.useState<Image[]>([])
   const [conversationMsg, setMsg] = React.useState<string[]>([])
   const [performCapture, setPerformCapture] = React.useState(false);
-  
 
-  const sampleData = ['apple', 'banana', 'orange','apple'];
-  
+
+  const sampleData: Message[] = [{
+    role: 'assistant',
+    text: 'Hi! I am A-Eye, how can I help you?'
+  }, {
+    role: 'user',
+    text: 'Can you tell me what is in front of me?'
+  }, {
+    role: 'assistant',
+    text: 'You are in a classroom. Directly in front of you, there is a teaching area with two blackboards filled with writing and diagrams. In front and slightly to the right is a podium with a computer setup. There are rows of tables with chairs facing the teaching area, and on the closest table to you on the left, there appears to be a jacket and a bag. The room is well-lit, and the doorway is off to the far left, beyond the teaching area.'
+  }]
+
   const handleMouseDown = () => {
     if (!started) {
       timeoutRef.current = window.setTimeout(() => {
         setIsHolding(true);
         setStarted(true);
-        // Add your action to be performed after holding for 5 seconds here
         console.log('Action after 5 seconds of holding the button');
-      }, 3000); // 5000 milliseconds = 5 seconds
+      }, 3000);
     }
     else {
       setStarted(false);
@@ -37,13 +50,13 @@ function App() {
     } else {
       setLogsOpen(true);
     }
-    
+
   }
 
   const handleMouseUp = () => {
     if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
-    }    setIsHolding(false);
+    } setIsHolding(false);
   };
 
   const handleMouseLeave = () => {
@@ -53,7 +66,7 @@ function App() {
     setIsHolding(false);
   };
 
-  const updateImages = (newImages: Image[] ) => {
+  const updateImages = (newImages: Image[]) => {
     setImages(newImages)
   }
 
@@ -63,23 +76,23 @@ function App() {
 
   const stopCapture = () => {
     setPerformCapture(false)
-    
+
   }
 
   return (
     <>
       <div className='overscroll-none overflow-hidden flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8 overscroll-none'>
-        <div className={`flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 ${started ? `border-red-600`: `border-white`}`}>
-          <div className={`${started ? ``: `hidden`} h-full w-auto bg-black rounded-lg`}>
+        <div className={`flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 ${started ? `border-red-600` : `border-white`}`}>
+          <div className={`${started ? `` : `hidden`} h-full w-auto bg-black rounded-lg`}>
             <Components.Camera isShowVideo={started} performCapture={performCapture} updateImages={updateImages} stopCapture={stopCapture} />
           </div>
-          <div className={`${started ? `hidden`: ``}  w-full h-full bg-zig-zag flex flex-col items-center justify-around text-red-800 py-32 space-y-2 rounded-lg `}>
+          <div className={`${started ? `hidden` : ``}  w-full h-full bg-zig-zag flex flex-col items-center justify-around text-red-800 py-32 space-y-2 rounded-lg `}>
             <div className=''>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" className="w-full h-auto">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M12 18.75H4.5a2.25 2.25 0 0 1-2.25-2.25V9m12.841 9.091L16.5 19.5m-1.409-1.409c.407-.407.659-.97.659-1.591v-9a2.25 2.25 0 0 0-2.25-2.25h-9c-.621 0-1.184.252-1.591.659m12.182 12.182L2.909 5.909M1.5 4.5l1.409 1.409" />
               </svg>
             </div>
-            
+
             <div className='text-5xl font-bold uppercase'>
               <p>Offline</p>
             </div>
@@ -117,10 +130,10 @@ function App() {
               <p className='button-text'>New</p>
             </button>
           </div>
-          
+
         </div>
 
-        <div className = {`z-30 flex flex-col items-start justify-end h-full absolute inset-y-0 w-96 min-h-screen py-16 right-0 transform duration-700 ease-out overscroll-none overflow-hidden ${logsOpen ? '-translate-x-40' : 'translate-x-full'}`}>
+        <div className={`z-30 flex flex-col items-start justify-end h-full absolute inset-y-0 w-96 min-h-screen py-16 right-0 transform duration-700 ease-out overscroll-none overflow-hidden ${logsOpen ? '-translate-x-40' : 'translate-x-full'}`}>
           <div className=" flex flex-col justify-start items-start w-full h-full bg-white rounded-lg">
             <div className='flex flex-col w-full justify-center items-center h-4'>
               {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
@@ -128,12 +141,12 @@ function App() {
               </svg> */}
             </div>
             <div className='overflow-y-scroll w-full h-auto'>
-              {sampleData.map((cell, index) => (
+              {sampleData.map((msg, index) => (
                 <div
                   key={index}
                   className={`table-item ${index % 2 === 0 ? 'bg-slate-200' : 'bg-slate-300'}`}
                 >
-                  {cell}
+                  {formatToConversationCell(msg)}
                 </div>
               ))}
             </div>
@@ -146,7 +159,7 @@ function App() {
         </div>
       </div>
     </>
-    
+
   );
 }
 
