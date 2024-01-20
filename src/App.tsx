@@ -8,7 +8,6 @@ import { Message } from './models/message';
 import { ConversationPayload } from './models/ConversationPayload';
 import { Image } from './models/image'
 import { formatToConversationCell } from './utils/stringUtil';
-import { Image } from './models/image'
 
 function App() {
   const [started, setStarted] = React.useState(false);
