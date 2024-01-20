@@ -5,7 +5,7 @@
 @layer components {
 
   .button-div {
-    @apply flex flex-row items-center justify-around rounded-full bg-white w-16 h-16 text-center ; 
+    @apply flex flex-row items-center justify-around rounded-full bg-white w-20 h-20 p-6 text-center hover:scale-[105%] hover:bg-slate-200 ease-in-out duration-200 transition-all ; 
   }
 
 }
@@ -18,4 +18,17 @@
     #465298 10px,
     #465298 20px
   );
+}
+
+.bg-zig-zag {
+  width: 500px;
+  height: 500px;
+  background-color: #252525;
+  background-image: linear-gradient(135deg, #000 25%, transparent 25%),
+    linear-gradient(225deg, #000 25%, transparent 25%),
+    linear-gradient(315deg, #000 25%, transparent 25%),
+    linear-gradient(45deg, #000 25%, transparent 25%);
+  background-position: -100px 0, -100px 0, 0 0, 0 0;
+  background-size: 180px 180px;
+  background-repeat: repeat;
 }
