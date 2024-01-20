@@ -1,6 +1,7 @@
 
 import logo from './logo.svg';
 import './App.css';
+import * as Components from './components/index'
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <div className='flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8'>
         <div className='flex flex-row w-full h-full bg-white rounded-lg border-4 border-indigo-800'>
           <p>Camera</p>
+          <Components.Camera/>
         </div>
 
         <div className='flex flex-col space-y-4 justify-between py-10'>
