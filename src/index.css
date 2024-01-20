@@ -12,6 +12,10 @@
     @apply text-xs uppercase font-semibold; 
   }
 
+  .table-item {
+    @apply w-full px-4 py-2 ;
+  }
+
 
 }
 
@@ -37,3 +41,5 @@
   background-size: 180px 180px;
   background-repeat: repeat;
 }
+
+html, body {margin: 0; height: 100%; overflow: hidden}
