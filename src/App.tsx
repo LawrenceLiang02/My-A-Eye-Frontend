@@ -15,9 +15,11 @@ function App() {
   const [isLogOpen, setIsLogOpen] = React.useState(false);
   const [isMicRecording, setIsMicRecording] = React.useState(false);
   const timeoutRef = useRef<number | null>(null);
-  const [conversationImages, setImages] = React.useState<Image[]>([])
-  const [conversationMsg, setMsg] = React.useState<string[]>([])
+  const [conversationImages, setImages] = React.useState<Image[]>([]);
+  const [conversationMsg, setMsg] = React.useState<string[]>([]);
   const [performCapture, setPerformCapture] = React.useState(false);
+  const [imagesDone, setImagesDone] = React.useState(false);
+  const [promptDone, setPromptDone] = React.useState(false);
 
 
   const sampleData: Message[] = [{
@@ -72,19 +74,26 @@ function App() {
 
   const handleNewConvo = () => {
     setPerformCapture(true)
+    setImages([])
+    setMsg([])
+    setImagesDone(false)
+    setPromptDone(false)
   }
 
   const stopCapture = () => {
     setPerformCapture(false)
+  }
 
+  const updateImagesDone = () => {
+    setImagesDone(true)
   }
 
   return (
     <>
       <div className='overscroll-none overflow-hidden flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8 overscroll-none'>
-        <div className={`flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 ${started ? `border-red-600` : `border-white`}`}>
-          <div className={`${started ? `` : `hidden`} h-full w-auto bg-black rounded-lg`}>
-            <Components.Camera isShowVideo={started} performCapture={performCapture} updateImages={updateImages} stopCapture={stopCapture} />
+        <div className={`flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 ${started ? `border-red-600 animate-blinkingRecording `: `border-white`}`}>
+          <div className={`${started ? ``: `hidden`} h-full w-auto bg-black rounded-lg`}>
+            <Components.Camera isShowVideo={started} performCapture={performCapture} updateImages={updateImages} stopCapture={stopCapture} updateImagesDone = {updateImagesDone} />
           </div>
           <div className={`${started ? `hidden` : ``}  w-full h-full bg-zig-zag flex flex-col items-center justify-around text-red-800 py-32 space-y-2 rounded-lg `}>
             <div className=''>

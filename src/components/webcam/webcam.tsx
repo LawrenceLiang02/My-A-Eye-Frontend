@@ -21,9 +21,10 @@ interface CameraProps {
   updateImages: (newValue: Image[]) => void
   performCapture: boolean
   stopCapture: () => void
+  updateImagesDone: () => void
 }
 
-const Camera : React.FC<CameraProps> = ({isShowVideo, performCapture, updateImages, stopCapture}) => {
+const Camera : React.FC<CameraProps> = ({isShowVideo, performCapture, updateImages, stopCapture, updateImagesDone}) => {
   const webcamRef = useRef<Webcam | null>(null);
   useEffect(() => {
     if (performCapture) {
@@ -61,7 +62,7 @@ const Camera : React.FC<CameraProps> = ({isShowVideo, performCapture, updateImag
     }
     updateImages(capturedImages);
     stopCapture();
-   
+    updateImagesDone();
   }, [webcamRef]);
 
   return (
