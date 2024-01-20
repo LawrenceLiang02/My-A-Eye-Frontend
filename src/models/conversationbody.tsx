@@ -1,5 +1,5 @@
 import { Message } from "./message";
-export type conversationBody = {
+export type ConversationBody = {
     pastMessages: Message[];
     currentMessage: Message;
     Images: string[];
