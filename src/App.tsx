@@ -1,13 +1,72 @@
-
 import logo from './logo.svg';
+import React, { useState, useRef } from 'react';
+import axios from 'axios';
 import './App.css';
 import * as Components from './components/index'
-import React from 'react';
+// import stopRecording from './components/stt/AudioRecorder'
 
 function App() {
-  const [started, setStarted] = React.useState(false);
-
+  const [started, setStarted] = useState(false);
+  const [recording, setRecording] = useState(false);
+  //   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+    const audioChunksRef = useRef<Blob[]>([]);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   
+    const startRecording = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorderRef.current = new MediaRecorder(stream);
+  
+        mediaRecorderRef.current.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunksRef.current.push(event.data);
+          }
+        };
+  
+        mediaRecorderRef.current.onstop = async () => {
+          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+          const formData = new FormData();
+          console.log(audioBlob);
+          formData.append('audio', audioBlob, 'recording.wav');
+  
+      //     setAudioBlob(audioBlob);
+  
+      // // Save the Blob locally using FileSaver
+      // saveAs(audioBlob, 'downloaded_audio.wav');
+  
+          try {
+            // Send the audio data to the server using Axios
+            await axios.post('http://127.0.0.1:5000/record', formData, {
+              headers: {
+                'Content-Type': 'audio/wav',
+              },
+            });
+  
+            console.log('Audio uploaded successfully');
+  
+  
+          } catch (error) {
+            console.error('Error uploading audio:', error);
+          }
+  
+          // Clear recorded audio chunks for the next recording
+          audioChunksRef.current = [];
+        };
+  
+        mediaRecorderRef.current.start();
+        setRecording(true);
+      } catch (error) {
+        console.error('Error accessing microphone:', error);
+      }
+    };
+  
+    const stopRecording = () => {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+        mediaRecorderRef.current.stop();
+        setRecording(false);
+      }
+    };
+
   return (
     <>
       <div className='flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8'>
@@ -45,12 +104,22 @@ function App() {
           </div>
 
           <div className='flex flex-col space-y-4'>
-            <button className='button-div'>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-full h-auto">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
-              </svg>
 
-            </button>
+          {recording ? (
+         <button onClick={stopRecording} className='button-div'>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-full h-auto">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+          </svg>
+          </button>
+        ) : (
+          <button onClick={startRecording} className='button-div'>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-full h-auto">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+          </svg>
+          </button>
+        )} 
+
+
           </div>
           
         </div>
