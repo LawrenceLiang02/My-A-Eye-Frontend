@@ -2,7 +2,7 @@
 import logo from './logo.svg';
 import './App.css';
 import * as Components from './components/index'
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { ConversationBody } from './models/conversationbody';
 import { Message } from './models/message';
 import { ConversationPayload } from './models/ConversationPayload';
@@ -10,19 +10,18 @@ import { Image } from './models/image'
 import { formatToConversationCell } from './utils/stringUtil';
 
 function App() {
-  const [started, setStarted] = React.useState(false);
-  const [isHolding, setIsHolding] = React.useState(false);
-  const [isLogOpen, setIsLogOpen] = React.useState(false);
-  const [isMicRecording, setIsMicRecording] = React.useState(false);
+  const [started, setStarted] = useState(false);
+  const [isHolding, setIsHolding] = useState(false);
+  const [isLogOpen, setIsLogOpen] = useState(false);
+  const [isMicRecording, setIsMicRecording] = useState(false);
   const timeoutRef = useRef<number | null>(null);
-  const [conversationImages, setImages] = React.useState<Image[]>([]);
-  const [conversationMsgs, setMsgs] = React.useState<Message[]>([]);
-  const [currentPrompt, setCurrentPrompt] = React.useState<Message | null>(null)
-  const [performCapture, setPerformCapture] = React.useState(false);
-  const [imagesDone, setImagesDone] = React.useState(false);
+  const [conversationImages, setImages] = useState<Image[]>([]);
+  const [conversationMsgs, setMsgs] = useState<Message[]>([]);
+  const [currentPrompt, setCurrentPrompt] = useState<Message | null>(null)
+  const [performCapture, setPerformCapture] = useState(false);
+  const [imagesDone, setImagesDone] = useState(false);
+  const [disableInputs, setDisableInputs] = useState(false)
   
-
-
   const sampleData: Message[] = [{
     role: 'assistant',
     text: 'Hi! I am A-Eye, how can I help you?'
@@ -138,13 +137,13 @@ function App() {
           </div>
 
           <div className='flex flex-col space-y-4'>
-            <button className={`button-div ${isMicRecording && started ? ' border-8 border-red-600 text-red-600 animate-blinkingRecording' : '' }`} onClick={micRecording}>
+            <button className={`button-div ${isMicRecording && started ? ' border-8 border-red-600 text-red-600 animate-blinkingRecording' : '' }`} onClick={micRecording} disabled={disableInputs} >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-full h-auto">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
               </svg>
               <p className='button-text'>Mic</p>
             </button>
-            <button className='button-div' onClick={handleNewConvo}>
+            <button className='button-div' onClick={handleNewConvo} disabled={disableInputs}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-full h-auto">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
