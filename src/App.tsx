@@ -10,6 +10,7 @@ function App() {
   const timeoutRef = useRef<number | null>(null);
 
   const handleMouseDown = () => {
+    console.log("test")
     if (!started) {
       timeoutRef.current = window.setTimeout(() => {
         setIsHolding(true);
@@ -60,10 +61,10 @@ function App() {
         <div className='flex flex-col space-y-4 justify-between py-10'>
           <div className='flex flex-col space-y-4'>
             <button className={`button-div ${started ? ` border-opacity-80 border-4 border-green-700 text-green-700` : ``} hover:border-opacity-80 hover:border-4 border-green-700 hover:text-green-700`}>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" className="w-full h-auto">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"  onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave} className="w-full h-auto">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
               </svg>
-              <p className='button-text' onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave}>Power</p>
+              <p className='button-text'>Power</p>
             </button>
 
             <button className='button-div'>
