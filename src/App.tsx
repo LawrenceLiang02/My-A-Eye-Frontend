@@ -45,10 +45,10 @@ function App() {
   };
 
   function logsClick() {
-    if (logsOpen) {
-      setLogsOpen(false)
+    if (isLogOpen) {
+      setIsLogOpen(false)
     } else {
-      setLogsOpen(true);
+      setIsLogOpen(true);
     }
 
   }
@@ -117,7 +117,7 @@ function App() {
           </div>
 
           <div className='flex flex-col space-y-4'>
-            <button className={`button-div ${isMicRecording ? ' border-8 border-red-600 text-red-600 animate-blinkingRecording' : '' }`} onClick={micRecording}>
+            <button className={`button-div ${isMicRecording ? ' border-8 border-red-600 text-red-600 animate-blinkingRecording' : '' }`} onClick={() => setIsMicRecording(true)}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-full h-auto">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
               </svg>
@@ -135,7 +135,7 @@ function App() {
 
         </div>
 
-        <div className={`z-30 flex flex-col items-start justify-end h-full absolute inset-y-0 w-96 min-h-screen py-16 right-0 transform duration-700 ease-out overscroll-none overflow-hidden ${logsOpen ? '-translate-x-40' : 'translate-x-full'}`}>
+        <div className={`z-30 flex flex-col items-start justify-end h-full absolute inset-y-0 w-96 min-h-screen py-16 right-0 transform duration-700 ease-out overscroll-none overflow-hidden ${isLogOpen  ? '-translate-x-40' : 'translate-x-full'}`}>
           <div className=" flex flex-col justify-start items-start w-full h-full bg-white rounded-lg">
             <div className='flex flex-col w-full justify-center items-center h-4'>
               {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
