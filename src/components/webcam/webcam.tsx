@@ -53,16 +53,15 @@ const Camera = () => {
 
   return (
     <>
-      <div>
+      <div className='w-auto h-full bg-black'>
         {isShowVideo &&
-        <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
+        <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" className='w-auto h-full' />
         }
         
         
       </div>
       <button onClick={capture}>Capture 10 photos</button> 
       <button onClick={stop}>Stop Video</button>
-      {/* button to be removed */}
     </>
   );
 };
