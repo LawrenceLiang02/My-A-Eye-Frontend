@@ -19,7 +19,6 @@ function App() {
   const [conversationMsgs, setMsgs] = useState<Message[]>([]);
   const [currentPrompt, setCurrentPrompt] = useState<Message | null>(null)
   const [performCapture, setPerformCapture] = useState(false);
-  const [imagesDone, setImagesDone] = useState(false);
   const [disableInputs, setDisableInputs] = useState(false)
   
   const sampleData: Message[] = [{
@@ -76,16 +75,11 @@ function App() {
     setPerformCapture(true)
     setImages([])
     setMsgs([])
-    setImagesDone(false)
     setCurrentPrompt(null);
   }
 
   const stopCapture = () => {
     setPerformCapture(false)
-  }
-
-  const updateImagesDone = () => {
-    setImagesDone(true)
   }
   
   // pass to audio recorder 
@@ -94,7 +88,7 @@ function App() {
       setMsgs(prevMsgs => [...prevMsgs, currentPrompt])
     }
     setCurrentPrompt(newPrompt)
-    if (imagesDone) {
+    if (conversationImages !== undefined && conversationImages !== null && conversationImages.length > 0) {
       //create data body
     }
   }
@@ -104,7 +98,7 @@ function App() {
       <div className='overscroll-none overflow-hidden flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8 overscroll-none'>
         <div className={`flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 ${started ? `border-red-600 animate-blinkingRecording `: `border-white`}`}>
           <div className={`${started ? ``: `hidden`} h-full w-auto bg-black rounded-lg`}>
-            <Components.Camera isShowVideo={started} performCapture={performCapture} updateImages={updateImages} stopCapture={stopCapture} updateImagesDone = {updateImagesDone} />
+            <Components.Camera isShowVideo={started} performCapture={performCapture} updateImages={updateImages} stopCapture={stopCapture} />
           </div>
           <div className={`${started ? `hidden` : ``}  w-full h-full bg-zig-zag flex flex-col items-center justify-around text-red-800 py-32 space-y-2 rounded-lg `}>
             <div className=''>
