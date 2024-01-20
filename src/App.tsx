@@ -90,6 +90,11 @@ function App() {
     setCurrentPrompt(newPrompt)
     if (conversationImages !== undefined && conversationImages !== null && conversationImages.length > 0) {
       //create data body
+      const conversation: ConversationBody = {
+        pastMessages: conversationMsgs,
+        currentMessage: currentPrompt!,
+        images: conversationImages
+      }
     }
   }
 
