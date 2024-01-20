@@ -2,18 +2,47 @@
 import logo from './logo.svg';
 import './App.css';
 import * as Components from './components/index'
-import React from 'react';
+import React, { useRef } from 'react';
 
 function App() {
   const [started, setStarted] = React.useState(false);
+  const [isHolding, setIsHolding] = React.useState(false);
+  const timeoutRef = useRef<number | null>(null);
 
-  
+  const handleMouseDown = () => {
+    if (!started) {
+      timeoutRef.current = window.setTimeout(() => {
+        setIsHolding(true);
+        setStarted(true);
+        // Add your action to be performed after holding for 5 seconds here
+        console.log('Action after 5 seconds of holding the button');
+      }, 3000); // 5000 milliseconds = 5 seconds
+    }
+    else {
+      setStarted(false);
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+    }
+    setIsHolding(false);
+  };
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+    }
+    setIsHolding(false);
+  };
+
   return (
     <>
       <div className='flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8'>
         <div className='flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 border-white '>
           <div className={`${started ? ``: `hidden`} h-full w-auto bg-black rounded-lg`}>
-            <Components.Camera/>
+            <Components.Camera isShowVideo={started}/>
           </div>
           <div className={`${started ? `hidden`: ``}  w-full h-full bg-zig-zag flex flex-col items-center justify-around text-red-800 py-32 space-y-2 rounded-lg `}>
             <div className=''>
@@ -30,11 +59,11 @@ function App() {
 
         <div className='flex flex-col space-y-4 justify-between py-10'>
           <div className='flex flex-col space-y-4'>
-            <button className='button-div'>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-full h-auto">
+            <button className={`button-div ${started ? ` border-opacity-80 border-4 border-green-700 text-green-700` : ``} hover:border-opacity-80 hover:border-4 border-green-700 hover:text-green-700`}>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" className="w-full h-auto">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
               </svg>
-
+              <p className='button-text' onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave}>Power</p>
             </button>
 
             <button className='button-div'>

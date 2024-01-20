@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import * as styles from './webcam.module.css'
+import { started } from '../../models/started';
 
 const dataURItoBlob = (dataURI: string): Blob => {
   const byteString = atob(dataURI.split(',')[1]);
@@ -15,9 +16,9 @@ const dataURItoBlob = (dataURI: string): Blob => {
   return new Blob([arrayBuffer], { type: mimeString });
 }; 
  
-const Camera = () => {
+const Camera = ({isShowVideo}:started) => {
   const webcamRef = useRef<Webcam | null>(null);
-  const [isShowVideo, setIsShowVideo] = useState(true);
+
   const capture = React.useCallback(async () => {
     const capturedImages: string[] = []; //to send to backend
 
@@ -48,24 +49,17 @@ const Camera = () => {
    
   }, [webcamRef]);
 
-  const stop = () => {
-    let stream = webcamRef.current?.stream;
-    const tracks = stream?.getTracks();
-    tracks?.forEach(track => track.stop());
-    setIsShowVideo(false);
-  }
-
   return (
     <>
       <div className='w-auto h-full bg-black'>
-        {isShowVideo &&
-        <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" className='w-auto h-full' />
+        {!isShowVideo ? (<div></div>)
+        :
+        (<Webcam audio={false} ref={webcamRef} mirrored={true} screenshotFormat="image/jpeg" className='w-auto h-full' />)
+        
         }
         
         
       </div>
-      <button onClick={capture}>Capture 10 photos</button> 
-      <button onClick={stop}>Stop Video</button>
     </>
   );
 };
