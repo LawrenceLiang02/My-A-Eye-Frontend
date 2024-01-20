@@ -1,6 +1,7 @@
 import { Message } from "./message";
-export type conversationBody = {
+import { Image } from "./image";
+export type ConversationBody = {
     pastMessages: Message[];
     currentPrompt: Message;
-    promptImages: string[];
+    promptImages: Image[];
 }
