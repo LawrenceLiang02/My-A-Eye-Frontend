@@ -5,12 +5,12 @@ import './App.css';
 function App() {
   return (
     <>
-      <div className='flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-20 px-8 bg-stripes space-x-8'>
+      <div className='flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8'>
         <div className='flex flex-row w-full h-full bg-white rounded-lg border-4 border-indigo-800'>
           <p>Camera</p>
         </div>
 
-        <div className='flex flex-col space-y-4 justify-between'>
+        <div className='flex flex-col space-y-4 justify-between py-10'>
           <div className='flex flex-col space-y-4'>
             <div className='button-div'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
