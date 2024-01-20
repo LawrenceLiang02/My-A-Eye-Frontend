@@ -26,8 +26,12 @@ const Camera = () => {
       const imageSrc = webcamRef.current?.getScreenshot();
 
       if (imageSrc !== undefined && imageSrc !== null) {
+        
+
+        const base64_data = imageSrc.split(';base64,')[1]
         capturedImages.push(imageSrc);
         const blob = dataURItoBlob(imageSrc);
+        
   
         // Create a download link (testing if images works)
         const a = document.createElement('a');
