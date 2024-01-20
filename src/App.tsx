@@ -4,13 +4,11 @@ import './App.css';
 import * as Components from './components/index'
 import React, { useRef } from 'react';
 import { ConversationBody } from './models/conversationbody';
-<<<<<<< HEAD
 import { Message } from './models/message';
 import { ConversationPayload } from './models/ConversationPayload';
 import { Image } from './models/image'
 import { formatToConversationCell } from './utils/stringUtil';
-
-import { Image }      from './models/image'
+import { Image } from './models/image'
 
 function App() {
   const [started, setStarted] = React.useState(false);
