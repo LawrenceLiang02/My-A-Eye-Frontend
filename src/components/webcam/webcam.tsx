@@ -72,7 +72,7 @@ const Camera: React.FC<CameraProps> = ({
           <Webcam
             audio={false}
             ref={webcamRef}
-            mirrored={true}
+            mirrored={false}
             screenshotFormat="image/jpeg"
             className="w-auto h-full"
           />
