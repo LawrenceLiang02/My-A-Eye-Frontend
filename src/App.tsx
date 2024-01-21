@@ -107,12 +107,12 @@ function App() {
 
   const stopCapture = () => {
     setPerformCapture(false)
-    
+
   }
-  
+
   // Used to set new prompt by user OR to pass new reply to TTS
-  const updateCurrentMsg = (newMsg : Message) => {
-    if(newMsg.role = "user") {
+  const updateCurrentMsg = (newMsg: Message) => {
+    if (newMsg.role = "user") {
       if (currentPrompt != null) {
         setMsgs(prevMsgs => [...prevMsgs, currentPrompt])
       }

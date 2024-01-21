@@ -30,20 +30,6 @@ export const MicButton = (props: MicButtonProps) => {
     recordingBlob,
   } = useAudioRecorder();
 
-  const downloadMp3 = (blob: Blob) => {
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    document.body.appendChild(a);
-
-    a.href = url;
-    a.download = 'audio.webm';
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-  };
-
   const handleClick = () => {
     if (!props.isMicRecording) {
       console.log("recording now")
@@ -73,7 +59,6 @@ export const MicButton = (props: MicButtonProps) => {
       })
     });
     ;
-
 
   }, [recordingBlob])
 
