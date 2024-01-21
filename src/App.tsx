@@ -90,6 +90,12 @@ function App() {
 
   const updateImages = (newImages: Image[]) => {
     setImages(newImages)
+    //testing tts
+    // const msg: Message = {
+    //   role: "user",
+    //   text: "bob"
+    // }
+    // setCurrentReply(msg)
   }
 
   const handleNewConvo = () => {
@@ -101,6 +107,7 @@ function App() {
 
   const stopCapture = () => {
     setPerformCapture(false)
+    
   }
   
   // Used to set new prompt by user OR to pass new reply to TTS

@@ -5,7 +5,6 @@ interface TextToSpeechProps {
 }
 
 const TextToSpeech: FC<TextToSpeechProps> = ({ reply }) => {
-  const [isPaused, setIsPaused] = useState(false);
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
@@ -14,43 +13,17 @@ const TextToSpeech: FC<TextToSpeechProps> = ({ reply }) => {
         const u = new SpeechSynthesisUtterance(reply.text);
     
         setUtterance(u);
-    
+        
+        if (u) {
+          synth.speak(u);
+        }
+        
         return () => {
           synth.cancel();
         };
     }
     
   }, [reply]);
-
-  const handlePlay = () => {
-    const synth = window.speechSynthesis;
-
-    if (utterance) {
-        if (isPaused) {
-          synth.resume();
-        }
-    
-        synth.speak(utterance);
-    
-        setIsPaused(false);
-      }
-  };
-
-  const handlePause = () => {
-    const synth = window.speechSynthesis;
-
-    synth.pause();
-
-    setIsPaused(true);
-  };
-
-  const handleStop = () => {
-    const synth = window.speechSynthesis;
-
-    synth.cancel();
-
-    setIsPaused(false);
-  };
 
   return (
     <div>
