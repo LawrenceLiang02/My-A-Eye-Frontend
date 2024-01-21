@@ -146,8 +146,8 @@ function App() {
       currentMessage: currentPrompt!,
       images: conversationImages
     }
-    //console.log(conversation)
-    //call post request or make another function for it?
+
+    console.log(conversation)
   }
 
   useEffect(() => {
@@ -234,8 +234,8 @@ function App() {
             <p className='button-text'>New</p>
           </button>
 
-        </div>
 
+        </div>
         <div className={`z-30 flex flex-col items-start justify-end h-full absolute inset-y-0 w-96 min-h-screen py-16 right-0 transform duration-700 ease-out overscroll-none overflow-hidden ${isLogOpen ? '-translate-x-40' : 'translate-x-full'}`}>
           <div className=" flex flex-col justify-start items-start w-full h-full bg-white rounded-lg">
             <div className='flex flex-col w-full justify-center items-center h-4'>
