@@ -14,7 +14,7 @@ const dataURItoBlob = (dataURI: string): Blob => {
   }
 
   return new Blob([arrayBuffer], { type: mimeString });
-}; 
+};
 
 interface CameraProps {
   isShowVideo: boolean
@@ -23,7 +23,7 @@ interface CameraProps {
   stopCapture: () => void
 }
 
-const Camera : React.FC<CameraProps> = ({isShowVideo, performCapture, updateImages, stopCapture}) => {
+const Camera: React.FC<CameraProps> = ({ isShowVideo, performCapture, updateImages, stopCapture }) => {
   const webcamRef = useRef<Webcam | null>(null);
   useEffect(() => {
     if (performCapture) {
@@ -38,15 +38,15 @@ const Camera : React.FC<CameraProps> = ({isShowVideo, performCapture, updateImag
       const imageSrc = webcamRef.current?.getScreenshot();
 
       if (imageSrc !== undefined && imageSrc !== null) {
-        
+
 
         const base64_data = imageSrc.split(';base64,')[1]
         capturedImages.push(base64_data);
 
 
         const blob = dataURItoBlob(imageSrc);
-        
-  
+
+
         // Create a download link (testing if images works)
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
@@ -67,12 +67,12 @@ const Camera : React.FC<CameraProps> = ({isShowVideo, performCapture, updateImag
     <>
       <div className='w-auto h-full bg-black'>
         {!isShowVideo ? (<div></div>)
-        :
-        (<Webcam audio={false} ref={webcamRef} mirrored={true} screenshotFormat="image/jpeg" className='w-auto h-full' />)
-        
+          :
+          (<Webcam audio={false} ref={webcamRef} mirrored={true} screenshotFormat="image/jpeg" className='w-auto h-full' />)
+
         }
-        
-        
+
+
       </div>
     </>
   );
