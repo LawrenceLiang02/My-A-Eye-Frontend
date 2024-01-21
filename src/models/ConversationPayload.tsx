@@ -1,3 +1,3 @@
 export type ConversationPayload = {
-  message: string
-}
+  message: string;
+};

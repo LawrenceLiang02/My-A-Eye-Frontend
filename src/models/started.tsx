@@ -1,3 +1,3 @@
-export type started= {
-    isShowVideo : boolean;
-}
+export type started = {
+  isShowVideo: boolean;
+};

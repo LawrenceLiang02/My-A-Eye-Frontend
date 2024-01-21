@@ -5,30 +5,28 @@ interface TextToSpeechProps {
 }
 
 const TextToSpeech: FC<TextToSpeechProps> = ({ reply }) => {
-  const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
+  const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(
+    null,
+  );
 
   useEffect(() => {
     if (reply != null) {
-        const synth = window.speechSynthesis;
-        const u = new SpeechSynthesisUtterance(reply.text);
-    
-        setUtterance(u);
-        
-        if (u) {
-          synth.speak(u);
-        }
-        
-        return () => {
-          synth.cancel();
-        };
+      const synth = window.speechSynthesis;
+      const u = new SpeechSynthesisUtterance(reply.text);
+
+      setUtterance(u);
+
+      if (u) {
+        synth.speak(u);
+      }
+
+      return () => {
+        synth.cancel();
+      };
     }
-    
   }, [reply]);
 
-  return (
-    <div>
-    </div>
-  );
+  return <div></div>;
 };
 
 export default TextToSpeech;
