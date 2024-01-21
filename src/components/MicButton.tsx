@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAudioRecorder } from 'react-audio-voice-recorder';
 import { Message } from '../models/message';
-
+import axios from 'axios';
 
 const blobToBase64 = (blob: Blob) => {
   const reader = new FileReader();
