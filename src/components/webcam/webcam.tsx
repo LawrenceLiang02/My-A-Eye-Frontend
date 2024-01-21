@@ -34,7 +34,7 @@ const Camera: React.FC<CameraProps> = ({ isShowVideo, performCapture, updateImag
     const capturedImages: string[] = []; //to send to backend
 
     // Capture 10 screenshots in sequence
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 1; i++) {
       const imageSrc = webcamRef.current?.getScreenshot();
 
       if (imageSrc !== undefined && imageSrc !== null) {

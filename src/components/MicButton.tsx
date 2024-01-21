@@ -14,12 +14,12 @@ const blobToBase64 = (blob: Blob) => {
 };
 
 type MicButtonProps = {
-  setNewUserMsg: (m: Message) => void
+  updateCurrentMsg: (m: Message) => void
   isMicRecording: boolean
   setIsMicRecording: any
   cameraHasStarted: boolean
-  handleNewConvo: () => void
   disabled: boolean
+  
 }
 
 export const MicButton = (props: MicButtonProps) => {
@@ -47,13 +47,15 @@ export const MicButton = (props: MicButtonProps) => {
     if (!recordingBlob) return;
 
     blobToBase64(recordingBlob).then(res => {
+
+      console.log(recordingBlob)
       if (typeof res !== "string") return;
 
       const base64 = res.split(',')[1]
 
       console.log(base64);
 
-      props.setNewUserMsg({
+      props.updateCurrentMsg({
         'role': 'user',
         'text': base64
       })
