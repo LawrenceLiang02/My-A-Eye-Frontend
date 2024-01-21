@@ -231,9 +231,8 @@ function App() {
               </svg>
 
               <p className='button-text'>New</p>
+            </div>
             </button>
-          </div>
-
         </div>
         <div className={`z-30 flex flex-col items-start justify-end h-full absolute inset-y-0 w-96 min-h-screen py-16 right-0 transform duration-700 ease-out overscroll-none overflow-hidden ${isLogOpen ? '-translate-x-40' : 'translate-x-full'}`}>
           <div className=" flex flex-col justify-start items-start w-full h-full bg-white rounded-lg">
