@@ -3,29 +3,28 @@ import * as Components from "./components/index";
 import React, { useRef, useState, useEffect } from "react";
 import { ConversationBody } from "./models/conversationbody";
 import { Message } from "./models/message";
-import { ConversationPayload } from "./models/ConversationPayload";
 import { Image } from "./models/image";
 import { formatToConversationCell } from "./utils/stringUtil";
 import { MicButton } from "./components/MicButton";
 import axios from "axios";
+import { ConversationPayload } from "./models/ConversationPayload";
 
 const API = "http://127.0.0.1:5000/api";
 
 function App() {
   const [started, setStarted] = useState(false);
-  const [isHolding, setIsHolding] = useState(false);
   const [isLogOpen, setIsLogOpen] = useState(false);
   const [isMicRecording, setIsMicRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDone, setIsLoadingDone] = useState(false);
-  const timeoutRef = useRef<number | null>(null);
   const [conversationImages, setImages] = useState<Image[]>([]);
   const [conversationMsgs, setMsgs] = useState<Message[]>([]);
   const [performCapture, setPerformCapture] = useState(false);
   const [currentPrompt, setCurrentPrompt] = useState<Message | null>(null);
   const [currentReply, setCurrentReply] = useState<Message | null>(null);
   const [disableInputs, setDisableInputs] = useState(false);
-  const [displayPopUp, setDisplayPopUp] = React.useState(false);
+
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -45,54 +44,9 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  const sampleData: Message[] = [
-    {
-      role: "assistant",
-      text: "Hi! I am A-Eye, how can I help you?",
-    },
-    {
-      role: "user",
-      text: "Can you tell me what is in front of me?",
-    },
-    {
-      role: "assistant",
-      text: "You are in a classroom. Directly in front of you, there is a teaching area with two blackboards filled with writing and diagrams. In front and slightly to the right is a podium with a computer setup. There are rows of tables with chairs facing the teaching area, and on the closest table to you on the left, there appears to be a jacket and a bag. The room is well-lit, and the doorway is off to the far left, beyond the teaching area.",
-    },
-  ];
-
-  const handleMouseDown = () => {
-    if (!started) {
-      timeoutRef.current = window.setTimeout(() => {
-        setIsHolding(true);
-        setStarted(true);
-        console.log("Action after 5 seconds of holding the button");
-      }, 3000);
-    } else {
-      setStarted(false);
-    }
-  };
-
   function logsClick() {
     setIsLogOpen(!isLogOpen);
   }
-
-  function micRecording() {
-    setIsMicRecording(!isMicRecording);
-  }
-
-  const handleMouseUp = () => {
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current);
-    }
-    setIsHolding(false);
-  };
-
-  const handleMouseLeave = () => {
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current);
-    }
-    setIsHolding(false);
-  };
 
   const updateImages = (newImages: Image[]) => {
     setImages(newImages);
@@ -109,6 +63,10 @@ function App() {
     setImages([]);
     setMsgs([]);
     setCurrentPrompt(null);
+    setCurrentReply({
+      role: "assistant",
+      text: "Hi! I am A-Eye, how can I help you?"
+    })
     // const msg: Message = {
     //   role: "assistant",
     //   text: "bob"
@@ -122,30 +80,31 @@ function App() {
 
   // Used to set new prompt by user OR to pass new reply to TTS
   const updateCurrentMsg = (newMsg: Message) => {
-    if (newMsg.role === "user") {
-      if (currentPrompt != null) {
-        setMsgs((prevMsgs) => [...prevMsgs, currentPrompt]);
-      }
-      setCurrentPrompt(newMsg);
-      if (
-        conversationImages !== undefined &&
-        conversationImages !== null &&
-        conversationImages.length > 0
-      ) {
-        createConversationBody();
-      }
-    } else if (newMsg.role === "assistant") {
-      if (currentReply != null) {
-        setMsgs((prevMsgs) => [...prevMsgs, currentReply]);
-      }
-      setDisplayPopUp(true);
-      setCurrentReply(newMsg);
-
-      setTimeout(() => {
-        setDisplayPopUp(false);
-      }, 4000);
+    setCurrentPrompt(newMsg);
+    if (
+      conversationImages !== undefined &&
+      conversationImages !== null &&
+      conversationImages.length > 0
+    ) {
+      createConversationBody();
     }
-  };
+  }
+
+  const handleReceivedPayload = (payload: ConversationPayload) => {
+    const userMsg: Message = {
+      role: 'user',
+      text: payload.user
+    }
+
+    const assistantMsg: Message = {
+      role: 'assistant',
+      text: payload.message
+    }
+
+    setMsgs((prevMsgs) => [...prevMsgs, userMsg, assistantMsg]);
+
+    setCurrentReply(assistantMsg);
+  }
 
   const createConversationBody = () => {
     const conversation: ConversationBody = {
@@ -160,15 +119,17 @@ function App() {
   const ProcessMessage = async (conversation: ConversationBody) => {
     let url = `${API}/eye`;
 
-    try {
-      const response = await axios.post(url, conversation);
+    await axios
+      .post(url, conversation)
+      .then(res => {
+        console.log(`got response ${res.data}`)
+        handleReceivedPayload(res.data)
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
 
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
   useEffect(() => {
     if (
       conversationImages !== undefined &&
@@ -177,9 +138,13 @@ function App() {
     ) {
       const body = createConversationBody();
 
-      const res = ProcessMessage(body);
-    }
+      console.log(`sending with body ${body}`)
+
+      ProcessMessage(body)
+    };
   }, [currentPrompt]);
+
+  console.log(currentReply)
 
   return (
     <>
@@ -196,17 +161,19 @@ function App() {
           </div>
         </div>
       </div>
-      <div
-        className={`${displayPopUp ? " animate-fadeIn " : "hidden"} absolute w-full h-auto left-0 top-0 flex flex-row items-center justify-around py-4`}
-      >
-        {currentReply && (
-          <Components.PopUpComp
-            role={currentReply.role}
-            text={currentReply.text}
-          ></Components.PopUpComp>
-        )}
-      </div>
-      <div className="overscroll-none overflow-hidden flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8 overscroll-none">
+
+      {/* <div */}
+      {/*   className={`${displayPopUp ? " animate-fadeIn " : "hidden"} absolute w-full h-auto left-0 top-0 flex flex-row items-center justify-around py-4`} */}
+      {/* > */}
+      {/*   {currentReply && ( */}
+      {/*     <Components.PopUpComp */}
+      {/*       role={currentReply.role} */}
+      {/*       text={currentReply.text} */}
+      {/*     ></Components.PopUpComp> */}
+      {/*   )} */}
+      {/* </div> */}
+
+      <div className="overscroll-none overflow-hidden flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8">
         <div
           className={`flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 ${started ? `border-red-600 animate-blinkingRecording ` : `border-white`}`}
         >
@@ -250,9 +217,7 @@ function App() {
           <div className="flex flex-col space-y-4">
             <button
               className={`button-div ${started ? `  border-8 border-green-700 text-green-700` : ``} hover:border-opacity-80 hover:border-4 border-green-700 hover:text-green-700`}
-              onMouseDown={handleMouseDown}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseLeave}
+              onClick={() => setStarted(!started)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -341,10 +306,15 @@ function App() {
               </svg> */}
             </div>
             <div className="overflow-y-scroll w-full h-auto">
-              {sampleData.map((msg, index) => (
+              <div
+                className={`table-item bg-slate-200`}
+              >
+                {formatToConversationCell({ role: "assistant", text: "Hi! I am A-Eye, how can I help you?" })}
+              </div>
+              {conversationMsgs.map((msg, index) => (
                 <div
                   key={index}
-                  className={`table-item ${index % 2 === 0 ? "bg-slate-200" : "bg-slate-300"}`}
+                  className={`table-item ${index % 2 === 1 ? "bg-slate-200" : "bg-slate-300"}`}
                 >
                   {formatToConversationCell(msg)}
                 </div>

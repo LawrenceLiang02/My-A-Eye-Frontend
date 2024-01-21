@@ -25,7 +25,7 @@ export const MicButton = (props: MicButtonProps) => {
   const { startRecording, stopRecording, recordingBlob } = useAudioRecorder();
 
   const handleClick = () => {
-    if (!props.isMicRecording) {
+    if (!props.isMicRecording && props.cameraHasStarted) {
       console.log("recording now");
       startRecording();
       props.setIsMicRecording(true);
@@ -39,28 +39,14 @@ export const MicButton = (props: MicButtonProps) => {
     if (!recordingBlob) return;
 
     blobToBase64(recordingBlob).then((res) => {
-      console.log(recordingBlob);
       if (typeof res !== "string") return;
 
       const base64 = res.split(",")[1];
-
-      // console.log(base64)
 
       props.updateCurrentMsg({
         role: "user",
         text: base64,
       });
-
-      // axios.post('http://127.0.0.1:5000/s2t', {
-      //     audio: base64
-      // })
-      // .then(response => {
-      //     console.log('You said:', response.data);
-      // })
-      // .catch(error => {
-      //     console.error('Error:', error);
-      // });
-      //
     });
   }, [recordingBlob]);
 

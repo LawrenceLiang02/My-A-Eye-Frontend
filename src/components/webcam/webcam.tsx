@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
-import * as styles from "./webcam.module.css";
-import { started } from "../../models/started";
 import { Image } from "../../models/image";
+
 const dataURItoBlob = (dataURI: string): Blob => {
   const byteString = atob(dataURI.split(",")[1]);
   const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
@@ -46,15 +45,15 @@ const Camera: React.FC<CameraProps> = ({
         const base64_data = imageSrc.split(";base64,")[1];
         capturedImages.push(base64_data);
 
-        const blob = dataURItoBlob(imageSrc);
+        // const blob = dataURItoBlob(imageSrc);
 
         // Create a download link (testing if images works)
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "captured_photo.jpg";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        // const a = document.createElement("a");
+        // a.href = URL.createObjectURL(blob);
+        // a.download = "captured_photo.jpg";
+        // document.body.appendChild(a);
+        // a.click();
+        // document.body.removeChild(a);
       }
 
       // Delay between captures, can be adjusted

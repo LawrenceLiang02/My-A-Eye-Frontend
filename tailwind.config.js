@@ -24,7 +24,7 @@ module.exports = {
         },
         blinkingRecording: {
           "0%": { transform: "scale(1)" },
-          "50%": { borderSize: "3", borderColor: "#f87171" }, // #fca5a5 #f87171
+          "50%": { borderSize: "3", borderColor: "#fecaca" }, // #fca5a5 #f87171
           "100%": { transform: "scale(1)" },
         },
         loadingAnimation: {
