@@ -21,6 +21,7 @@ function App() {
   const [conversationNewUserMsg, setNewUserMsg] = React.useState<Message | undefined>(undefined)
   const [performCapture, setPerformCapture] = React.useState(false);
   const [currentPrompt, setCurrentPrompt] = useState<Message | null>(null)
+  const [currentReply, setCurrentReply] = useState<Message | null>(null);
   const [disableInputs, setDisableInputs] = useState(false)
 
   useEffect(() => {
@@ -89,6 +90,12 @@ function App() {
 
   const updateImages = (newImages: Image[]) => {
     setImages(newImages)
+    //testing tts
+    // const msg: Message = {
+    //   role: "user",
+    //   text: "bob"
+    // }
+    // setCurrentReply(msg)
   }
 
   const handleNewConvo = () => {
@@ -100,16 +107,24 @@ function App() {
 
   const stopCapture = () => {
     setPerformCapture(false)
+    
   }
-
-  // pass to audio recorder 
-  const updateCurrentPrompt = (newPrompt: Message) => {
-    if (currentPrompt != null) {
-      setMsgs(prevMsgs => [...prevMsgs, currentPrompt])
-    }
-    setCurrentPrompt(newPrompt)
-    if (conversationImages !== undefined && conversationImages !== null && conversationImages.length > 0) {
-      createConversationBody();
+  
+  // Used to set new prompt by user OR to pass new reply to TTS
+  const updateCurrentMsg = (newMsg : Message) => {
+    if(newMsg.role = "user") {
+      if (currentPrompt != null) {
+        setMsgs(prevMsgs => [...prevMsgs, currentPrompt])
+      }
+      setCurrentPrompt(newMsg)
+      if (conversationImages !== undefined && conversationImages !== null && conversationImages.length > 0) {
+        createConversationBody();
+      }
+    } else if (newMsg.role = "assistant") {
+      if (currentReply != null) {
+        setMsgs(prevMsgs => [...prevMsgs, currentReply])
+      }
+      setCurrentReply(newMsg);
     }
   }
 
@@ -221,6 +236,7 @@ function App() {
           </div>
         </div>
       </div>
+      <Components.TextToSpeech reply={currentReply} />
     </>
 
   );
