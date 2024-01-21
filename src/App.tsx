@@ -22,6 +22,7 @@ function App() {
   const [currentPrompt, setCurrentPrompt] = useState<Message | null>(null)
   const [currentReply, setCurrentReply] = useState<Message | null>(null);
   const [disableInputs, setDisableInputs] = useState(false)
+  const [displayPopUp, setDisplayPopUp] = React.useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -89,7 +90,7 @@ function App() {
 
   const updateImages = (newImages: Image[]) => {
     setImages(newImages)
-    //testing tts
+    // testing tts
     // const msg: Message = {
     //   role: "user",
     //   text: "bob"
@@ -102,6 +103,11 @@ function App() {
     setImages([])
     setMsgs([])
     setCurrentPrompt(null);
+    // const msg: Message = {
+    //   role: "assistant",
+    //   text: "bob"
+    // }
+    // updateCurrentMsg(msg);
   }
 
   const stopCapture = () => {
@@ -109,18 +115,27 @@ function App() {
   }
 
   // Used to set new prompt by user OR to pass new reply to TTS
-  const updateCurrentMsg = (newMsg: Message) => {
-    if (newMsg.role = "user") {
+  const updateCurrentMsg = (newMsg : Message) => {
+    if(newMsg.role === "user") {
       if (currentPrompt != null) {
         setMsgs(prevMsgs => [...prevMsgs, currentPrompt])
       }
       setCurrentPrompt(newMsg)
-
-    } else if (newMsg.role = "assistant") {
+      if (conversationImages !== undefined && conversationImages !== null && conversationImages.length > 0) {
+        createConversationBody();
+      }
+    } 
+    else if (newMsg.role === "assistant") {
       if (currentReply != null) {
         setMsgs(prevMsgs => [...prevMsgs, currentReply])
       }
+      setDisplayPopUp(true);
       setCurrentReply(newMsg);
+
+      setTimeout(() => {
+        setDisplayPopUp(false);
+      }, 4000);
+      
     }
   }
 
@@ -157,9 +172,17 @@ function App() {
         </div>
 
       </div>
-      <div className='overscroll-none overflow-hidden flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-499 py-10 px-8 bg-stripes space-x-8 '>
-        <div className={`flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 ${started ? `border-red-600 animate-blinkingRecording ` : `border-white`}`}>
-          <div className={`${started ? `` : `hidden`} h-full w-auto bg-black rounded-lg`}>
+      <div className={`${displayPopUp ? " animate-fadeIn " : "hidden"} absolute w-full h-auto left-0 top-0 flex flex-row items-center justify-around py-4`}>
+       {currentReply && (
+          <Components.PopUpComp
+            role={currentReply.role}
+            text={currentReply.text}
+          ></Components.PopUpComp>
+        )}
+      </div>
+      <div className='overscroll-none overflow-hidden flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8 overscroll-none'>
+        <div className={`flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 ${started ? `border-red-600 animate-blinkingRecording `: `border-white`}`}>
+          <div className={`${started ? ``: `hidden`} h-full w-auto bg-black rounded-lg`}>
             <Components.Camera isShowVideo={started} performCapture={performCapture} updateImages={updateImages} stopCapture={stopCapture} />
           </div>
           <div className={`${started ? `hidden` : ``}  w-full h-full bg-zig-zag flex flex-col items-center justify-around text-red-800 py-32 space-y-2 rounded-lg `}>
