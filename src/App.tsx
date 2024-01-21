@@ -2,7 +2,7 @@
 import logo from './logo.svg';
 import './App.css';
 import * as Components from './components/index'
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect} from 'react';
 import { ConversationBody } from './models/conversationbody';
 import { Message } from './models/message';
 import { ConversationPayload } from './models/ConversationPayload';
@@ -10,16 +10,36 @@ import { Image } from './models/image'
 import { formatToConversationCell } from './utils/stringUtil';
 
 function App() {
-  const [started, setStarted] = useState(false);
-  const [isHolding, setIsHolding] = useState(false);
-  const [isLogOpen, setIsLogOpen] = useState(false);
-  const [isMicRecording, setIsMicRecording] = useState(false);
+  const [started, setStarted] = React.useState(false);
+  const [isHolding, setIsHolding] = React.useState(false);
+  const [isLogOpen, setIsLogOpen] = React.useState(false);
+  const [isMicRecording, setIsMicRecording] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoadingDone, setIsLoadingDone] = React.useState(false);
   const timeoutRef = useRef<number | null>(null);
-  const [conversationImages, setImages] = useState<Image[]>([]);
-  const [conversationMsgs, setMsgs] = useState<Message[]>([]);
+  const [conversationImages, setImages] = React.useState<Image[]>([])
+  const [conversationMsgs, setMsgs] = React.useState<Message[]>([])
+  const [performCapture, setPerformCapture] = React.useState(false);
   const [currentPrompt, setCurrentPrompt] = useState<Message | null>(null)
-  const [performCapture, setPerformCapture] = useState(false);
   const [disableInputs, setDisableInputs] = useState(false)
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    // Clear the timer if the component unmounts or if you want to cancel the animation for some reason
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoadingDone(true);
+    }, 4000);
+
+    // Clear the timer if the component unmounts or if you want to cancel the animation for some reason
+    return () => clearTimeout(timer);
+  }, []);
   
   const sampleData: Message[] = [{
     role: 'assistant',
@@ -105,6 +125,20 @@ function App() {
 
   return (
     <>
+      <div className={`${!isLoading ? 'animate-fadeOut' : '' }  ${isLoadingDone ? 'hidden' : '' } absolute w-screen min-h-screen min-h-screen h-full bg-white z-40 flex flex-col items-center justify-center space-y-8`}>
+        <div className={`animate-loading w-full h-96 bg-no-repeat bg-center`}>
+
+        </div>
+        <div className='flex flex-col items-center justify-center'>
+          <div className={`text-5xl uppercase font-semibold`}>
+            My A-Eye
+          </div>
+          <div className={`text-3xl uppercase font-semibold`}>
+            For ConUHacksVIII
+          </div>
+        </div>
+        
+      </div>
       <div className='overscroll-none overflow-hidden flex flex-row max-h-screen h-screen max-w-screen w-screen bg-red-500 py-10 px-8 bg-stripes space-x-8 overscroll-none'>
         <div className={`flex flex-row justify-around w-full h-full bg-black rounded-lg border-8 ${started ? `border-red-600 animate-blinkingRecording `: `border-white`}`}>
           <div className={`${started ? ``: `hidden`} h-full w-auto bg-black rounded-lg`}>
