@@ -9,7 +9,7 @@ const TextToSpeech: FC<TextToSpeechProps> = ({ reply }) => {
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(
     null,
   );
-  console.log(reply)
+  console.log(reply);
 
   useEffect(() => {
     if (!reply) return;
@@ -17,13 +17,15 @@ const TextToSpeech: FC<TextToSpeechProps> = ({ reply }) => {
     const synth = window.speechSynthesis;
 
     const speakWithVoice = (voices: any, text: any) => {
-      const voice = voices.find((v: SpeechSynthesisVoice) => v.name === 'Nicky');
+      const voice = voices.find(
+        (v: SpeechSynthesisVoice) => v.name === "Nicky",
+      );
       const u = new SpeechSynthesisUtterance(text);
 
       if (voice) {
         u.voice = voice;
       } else {
-        console.error('Nicky voice not found');
+        console.error("Nicky voice not found");
       }
 
       setUtterance(u);
@@ -31,13 +33,12 @@ const TextToSpeech: FC<TextToSpeechProps> = ({ reply }) => {
       if (u) {
         synth.speak(u);
       }
-    }
-
+    };
 
     // Wait until the voices are loaded
     let voices = synth.getVoices();
     if (voices.length === 0) {
-      synth.addEventListener('voiceschanged', () => {
+      synth.addEventListener("voiceschanged", () => {
         voices = synth.getVoices();
         speakWithVoice(voices, reply.text);
       });

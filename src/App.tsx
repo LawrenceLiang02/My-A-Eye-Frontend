@@ -65,8 +65,8 @@ function App() {
     setCurrentPrompt(null);
     setCurrentReply({
       role: "assistant",
-      text: "Hi! I am A-Eye, how can I help you?"
-    })
+      text: "Hi! I am A-Eye, how can I help you?",
+    });
     // const msg: Message = {
     //   role: "assistant",
     //   text: "bob"
@@ -88,23 +88,23 @@ function App() {
     ) {
       createConversationBody();
     }
-  }
+  };
 
   const handleReceivedPayload = (payload: ConversationPayload) => {
     const userMsg: Message = {
-      role: 'user',
-      text: payload.user
-    }
+      role: "user",
+      text: payload.user,
+    };
 
     const assistantMsg: Message = {
-      role: 'assistant',
-      text: payload.message
-    }
+      role: "assistant",
+      text: payload.message,
+    };
 
     setMsgs((prevMsgs) => [...prevMsgs, userMsg, assistantMsg]);
 
     setCurrentReply(assistantMsg);
-  }
+  };
 
   const createConversationBody = () => {
     const conversation: ConversationBody = {
@@ -121,14 +121,14 @@ function App() {
 
     await axios
       .post(url, conversation)
-      .then(res => {
-        console.log(`got response ${res.data}`)
-        handleReceivedPayload(res.data)
+      .then((res) => {
+        // console.log(`got response ${res.data}`)
+        handleReceivedPayload(res.data);
       })
-      .catch(error => {
-        console.error('Error:', error);
+      .catch((error) => {
+        console.error("Error:", error);
       });
-  }
+  };
 
   useEffect(() => {
     if (
@@ -138,13 +138,13 @@ function App() {
     ) {
       const body = createConversationBody();
 
-      console.log(`sending with body ${body}`)
+      // console.log(`sending with body ${body}`)
 
-      ProcessMessage(body)
-    };
+      ProcessMessage(body);
+    }
   }, [currentPrompt]);
 
-  console.log(currentReply)
+  // console.log(currentReply)
 
   return (
     <>
@@ -306,10 +306,11 @@ function App() {
               </svg> */}
             </div>
             <div className="overflow-y-scroll w-full h-auto">
-              <div
-                className={`table-item bg-slate-200`}
-              >
-                {formatToConversationCell({ role: "assistant", text: "Hi! I am A-Eye, how can I help you?" })}
+              <div className={`table-item bg-slate-200`}>
+                {formatToConversationCell({
+                  role: "assistant",
+                  text: "Hi! I am A-Eye, how can I help you?",
+                })}
               </div>
               {conversationMsgs.map((msg, index) => (
                 <div

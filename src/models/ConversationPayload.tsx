@@ -1,4 +1,4 @@
 export type ConversationPayload = {
-  user: string
+  user: string;
   message: string;
 };
