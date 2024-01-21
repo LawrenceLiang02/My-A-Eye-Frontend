@@ -157,7 +157,7 @@ function App() {
   },[currentPrompt])
 
   return (
-    <>
+   <>
       <div className={`${!isLoading ? 'animate-fadeOut' : ''}  ${isLoadingDone ? 'hidden' : ''} absolute w-screen min-h-screen h-full bg-white z-40 flex flex-col items-center justify-center space-y-8`}>
         <div className={`animate-loading w-full h-96 bg-no-repeat bg-center`}>
 
@@ -231,9 +231,12 @@ function App() {
               </svg>
 
               <p className='button-text'>New</p>
-            </div>
             </button>
+
+          </div>
+          
         </div>
+
         <div className={`z-30 flex flex-col items-start justify-end h-full absolute inset-y-0 w-96 min-h-screen py-16 right-0 transform duration-700 ease-out overscroll-none overflow-hidden ${isLogOpen ? '-translate-x-40' : 'translate-x-full'}`}>
           <div className=" flex flex-col justify-start items-start w-full h-full bg-white rounded-lg">
             <div className='flex flex-col w-full justify-center items-center h-4'>
