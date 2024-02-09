@@ -8,6 +8,7 @@ import { formatToConversationCell } from "./utils/stringUtil";
 import { MicButton } from "./components/MicButton";
 import axios from "axios";
 import { ConversationPayload } from "./models/ConversationPayload";
+import PopUp from "./components/popup/popup";
 
 const API = "http://127.0.0.1:5000/api";
 
@@ -17,6 +18,7 @@ function App() {
   const [isMicRecording, setIsMicRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDone, setIsLoadingDone] = useState(false);
+  const [displayPopUp, setDisplayPopUp] = useState(true);
   const [conversationImages, setImages] = useState<Image[]>([]);
   const [conversationMsgs, setMsgs] = useState<Message[]>([]);
   const [performCapture, setPerformCapture] = useState(false);
@@ -162,6 +164,7 @@ function App() {
         </div>
       </div>
 
+      <PopUp></PopUp>
       {/* <div */}
       {/*   className={`${displayPopUp ? " animate-fadeIn " : "hidden"} absolute w-full h-auto left-0 top-0 flex flex-row items-center justify-around py-4`} */}
       {/* > */}
@@ -294,10 +297,34 @@ function App() {
               <p className="button-text">New</p>
             </button>
           </div>
+
+        </div>
+
+        <div className="absolute bottom-0 right-0 z-10 px-4 flex flex-row py-4 justify-between space-x-2">
+          <button
+              className={`info-button-div ${isLogOpen ? `  border-8 border-blue-600 text-blue-600` : ``} hover:border-opacity-80 hover:border-4 border-blue-700 hover:text-blue-700`}
+              onClick={logsClick}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-auto h-auto">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+              </svg>
+
+            </button>
+
+            <button
+              className={`info-button-div ${isLogOpen ? `  border-8 border-blue-600 text-blue-600` : ``} hover:border-opacity-80 hover:border-4 border-blue-700 hover:text-blue-700`}
+              onClick={logsClick}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-auto h-auto">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75 16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
+              </svg>
+
+
+            </button>
         </div>
 
         <div
-          className={`z-30 flex flex-col items-start justify-end h-full absolute inset-y-0 w-96 min-h-screen py-16 right-0 transform duration-700 ease-out overscroll-none overflow-hidden ${isLogOpen ? "-translate-x-40" : "translate-x-full"}`}
+          className={`z-30 flex flex-col items-start justify-end h-full absolute inset-y-0 w-96 min-h-screen py-16 right-0 transform duration-700 ease-out overscroll-none overflow-hidden ${isLogOpen ? "-translate-x-[50%]" : "translate-x-full"}`}
         >
           <div className=" flex flex-col justify-start items-start w-full h-full bg-white rounded-lg">
             <div className="flex flex-col w-full justify-center items-center h-4">
