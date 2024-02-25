@@ -36,11 +36,11 @@ function PopUp() {
 
             <div className="flex flex-col items-left justify-center">
               <p className="popUp-title">
-                Due to expensive hosting fees, we are unable to host the AI back-end continously.
+                Due to expensive hosting fees, we are unable to host the AI back-end continously (ChatGPT).
               </p>
 
               <p className="popUp-title">
-              Hence why we have hard coded certain dialogs.
+              Hence why we have hard coded certain dialogs with the backend.
               </p>
             </div>
 
@@ -49,7 +49,7 @@ function PopUp() {
               <div className="flex flex-row space-x-2">
                 <p className="popUp-title">📚 Instructions & Help: </p>
 
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" className="w-6 h-6 rounded-full border-2 border-black">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" className="w-6 h-6 rounded-full border-2 border-black p-[1px]">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75 16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
                 </svg>
               </div>
@@ -85,6 +85,7 @@ function PopUp() {
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="white" className="w-8 h-8">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
           </svg>
+          
 
         </button>
       </div>

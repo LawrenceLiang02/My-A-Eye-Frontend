@@ -9,6 +9,8 @@ module.exports = {
         loading: "loadingAnimation 1.5s ease-in-out infinite ",
         fadeOut: "fadeOut 2s ease-in-out",
         fadeIn: "fadeIn 4s ease-in-out",
+        fadeIn3: "fadeIn2 1s ease-in-out",
+        fadeOut3: "fadeOut 1s ease-in-out",
       },
       keyframes: {
         gradientAnimation: {
@@ -59,6 +61,10 @@ module.exports = {
         fadeOut: {
           "0%": { opacity: 1 },
           "100%": { opacity: 0 },
+        },
+        fadeIn2: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
         },
         fadeIn: {
           "0%": { opacity: 0 },

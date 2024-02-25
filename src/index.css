@@ -8,7 +8,7 @@
   }
 
   .info-button-div {
-    @apply z-0 flex flex-col items-center justify-around rounded-full bg-slate-200 bg-opacity-90 w-10 h-10 p-1 text-center hover:scale-[110%] ease-in-out duration-200 transition-all;
+    @apply z-0 flex flex-col items-center justify-around rounded-full bg-white w-10 h-10 p-1 text-center hover:scale-[110%] ease-in-out duration-200 transition-all drop-shadow-2xl;
   }
   .button-text {
     @apply text-xs uppercase font-semibold;
@@ -20,6 +20,30 @@
 
   .popUp-title {
     @apply text-lg;
+  }
+
+  .instruction-button-parent {
+    @apply flex flex-row items-center justify-start space-x-4;
+  }
+
+  .dev-icon {
+    @apply rounded-full hover:scale-[103%]  ease-in-out duration-200 transition-all drop-shadow-lg hover:drop-shadow-xl;
+  }
+
+  .dev-parent {
+    @apply w-48 flex flex-col items-center justify-center space-y-2;
+  }
+
+  .dev-name {
+    @apply text-2xl font-semibold text-center hover:underline;
+  }
+
+  .dev-links {
+    @apply flex flex-col items-start text-lg font-semibold;
+  }
+
+  .dev-link {
+    @apply flex flex-row items-center justify-between space-x-4 hover:text-blue-500;
   }
 }
 
