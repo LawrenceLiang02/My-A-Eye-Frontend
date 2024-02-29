@@ -11,8 +11,11 @@ import { ConversationPayload } from "./models/ConversationPayload";
 import PopUp from "./components/popup/popup";
 import InstructionsPopUp from "./components/popup/instructionspopup";
 import DevPopUp from "./components/popup/devpopup";
+import jsonData from './conversation.json';
 
 const API = "http://127.0.0.1:5000/api";
+
+let indexId = 1;
 
 function App() {
   const [started, setStarted] = useState(false);
@@ -97,15 +100,15 @@ function App() {
     }
   };
 
-  const handleReceivedPayload = (payload: ConversationPayload) => {
+  const handleReceivedPayload = (payload1: ConversationPayload, payload2: ConversationPayload) => {
     const userMsg: Message = {
       role: "user",
-      text: payload.user,
+      text: payload1.message,
     };
 
     const assistantMsg: Message = {
       role: "assistant",
-      text: payload.message,
+      text: payload2.message,
     };
 
     setMsgs((prevMsgs) => [...prevMsgs, userMsg, assistantMsg]);
@@ -124,17 +127,45 @@ function App() {
   };
 
   const ProcessMessage = async (conversation: ConversationBody) => {
-    let url = `${API}/eye`;
+    // let url = `${API}/eye`;
 
-    await axios
-      .post(url, conversation)
-      .then((res) => {
-        // console.log(`got response ${res.data}`)
-        handleReceivedPayload(res.data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    // await axios
+    //   .post(url, conversation)
+    //   .then((res) => {
+    //     // console.log(`got response ${res.data}`)
+    //     handleReceivedPayload(res.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
+    
+    const foundItem = jsonData.find(item => item.id === indexId);
+    if (indexId == 4) {
+      indexId = 1
+    }
+    else {
+      indexId += 1
+    }
+
+    console.log(indexId);
+
+    if (!foundItem) {
+      console.log('Item not found'); // Handle case where item is not found
+      return null; // Or return some other JSX indicating item not found
+    }
+  
+    const userConv: ConversationPayload = {
+      user: foundItem.role1,
+      message: foundItem.text1
+    };
+
+    const assistantConv: ConversationPayload = {
+      user: foundItem.role2,
+      message: foundItem.text2
+    };
+    
+    
+    handleReceivedPayload(userConv, assistantConv);
   };
 
   useEffect(() => {
