@@ -10,6 +10,10 @@ const root = ReactDOM.createRoot(
 root.render(
   
   <React.StrictMode>
+    <meta name="description" content="Hackathon Project for ConUHacksVIII" />
+    <meta name="title" content="My A-EyE" />
+    <meta name="og:description" content="Hackathon Project for ConUHacksVIII" />
+    <meta name="og:title" content="My A-EyE" />
     <App />
   </React.StrictMode>,
 );

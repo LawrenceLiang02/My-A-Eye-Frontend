@@ -189,6 +189,8 @@ function App() {
     <>
     <meta name="description" content="Hackathon Project for ConUHacksVIII" />
     <meta name="title" content="My A-EyE" />
+    <meta name="og:description" content="Hackathon Project for ConUHacksVIII" />
+    <meta name="og:title" content="My A-EyE" />
       <div
         className={`${!isLoading ? "animate-fadeOut" : ""}  ${isLoadingDone ? "hidden" : ""} absolute w-screen min-h-screen h-full bg-white z-40 flex flex-col items-center justify-center space-y-8`}
       >
