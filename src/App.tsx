@@ -37,6 +37,7 @@ function App() {
 
   useEffect(() => {
     document.title = 'My A-EyE';
+    
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -186,6 +187,8 @@ function App() {
 
   return (
     <>
+    <meta name="description" content="Hackathon Project for ConUHacksVIII" />
+    <meta name="title" content="My A-EyE" />
       <div
         className={`${!isLoading ? "animate-fadeOut" : ""}  ${isLoadingDone ? "hidden" : ""} absolute w-screen min-h-screen h-full bg-white z-40 flex flex-col items-center justify-center space-y-8`}
       >
